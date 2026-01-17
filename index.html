@@ -197,13 +197,13 @@
             loading.style.display = 'block';
             
             // TODO: Replace with your actual ABA PayWay merchant credentials
-            const MERCHANT_ID = "YOUR_ABA_MERCHANT_ID"; // Get from ABA PayWay
-            const AMOUNT = "9.99";
+            const MERCHANT_ID = "284002"; // Get from ABA PayWay
+            const AMOUNT = "24.99";
             const CURRENCY = "USD";
             
             // Build ABA PayWay URL
             // NOTE: This is a simplified example. Check ABA PayWay API docs for exact parameters
-            const abaPaywayURL = "https://payway.ababank.com/checkout?" + 
+            const abaPaywayURL = "https://link.payway.com.kh/7U4077007" + 
                 "merchant_id=" + encodeURIComponent(MERCHANT_ID) +
                 "&amount=" + encodeURIComponent(AMOUNT) +
                 "&currency=" + encodeURIComponent(CURRENCY) +
