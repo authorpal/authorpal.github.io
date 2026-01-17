@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Successful - AuthorPal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 600px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: bounce 0.6s;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        h1 {
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .info-box {
+            background: #f0f8ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            border-radius: 5px;
+        }
+        
+        .info-box h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .steps {
+            text-align: left;
+            margin: 30px 0;
+        }
+        
+        .steps ol {
+            margin-left: 20px;
+        }
+        
+        .steps li {
+            margin: 15px 0;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .btn-download {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 20px 0;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .loading {
+            color: #667eea;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        
+        .error {
+            color: #e74c3c;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">✅</div>
+        <h1>Payment Successful!</h1>
+        <p class="subtitle">Welcome to AuthorPal!</p>
+        
+        <div class="info-box">
+            <h3>📧 Email Sent</h3>
+            <p id="email-display">Check your email for your license key.</p>
+            <p style="font-size: 0.9em; color: #666; margin-top: 10px;">
+                If you don't see it, check your spam folder.
+            </p>
+        </div>
+        
+        <div class="loading" id="generating">
+            🔄 Generating your license key...
+        </div>
+        
+        <div class="error" id="error" style="display: none;"></div>
+        
+        <div class="steps">
+            <h3 style="color: #333; margin-bottom: 20px;">📖 Next Steps:</h3>
+            <ol>
+                <li>
+                    <span class="step-number">1</span>
+                    <strong>Download AuthorPal Desktop</strong><br>
+                    <a href="https://github.com/srengpagna/author-pal/releases" target="_blank" style="color: #667eea;">
+                        Download from GitHub Releases →
+                    </a>
+                </li>
+                <li>
+                    <span class="step-number">2</span>
+                    <strong>Install the Application</strong><br>
+                    Run the installer and follow the setup wizard.
+                </li>
+                <li>
+                    <span class="step-number">3</span>
+                    <strong>Open AuthorPal</strong><br>
+                    Launch the application on your computer.
+                </li>
+                <li>
+                    <span class="step-number">4</span>
+                    <strong>Enter Your License Key</strong><br>
+                    Go to Settings → License and paste your key.
+                </li>
+                <li>
+                    <span class="step-number">5</span>
+                    <strong>Click Activate</strong><br>
+                    Your app is now fully activated! 🎉
+                </li>
+            </ol>
+        </div>
+        
+        <a href="https://github.com/srengpagna/author-pal/releases" class="btn-download" target="_blank">
+            ⬇️ Download AuthorPal Now
+        </a>
+        
+        <p style="color: #999; font-size: 0.9em; margin-top: 30px;">
+            Questions? Contact support at: <strong>support@authorpal.com</strong>
+        </p>
+    </div>
+
+    <script>
+        // Get email from URL parameter
+        const params = new URLSearchParams(window.location.search);
+        const email = params.get('email');
+        const paymentToken = params.get('payment_token');
+        
+        if (email) {
+            document.getElementById('email-display').textContent = `Check your email at ${email} for your license key.`;
+            
+            // Call Google Apps Script to generate license
+            triggerLicenseGeneration(email, paymentToken);
+        }
+        
+        function triggerLicenseGeneration(email, paymentToken) {
+            const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJ3pz5XWKfGtgNQqrfabNkZIciouT-eONCqxwm_-js13PsSSGKmnoSRlw_sQG6X1cudw/exec";
+            
+            fetch(APPS_SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: "PURCHASE",
+                    email: email,
+                    payment_token: paymentToken || "manual"
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('generating').style.display = 'none';
+                if (data.success) {
+                    console.log("License generated successfully:", data);
+                } else {
+                    document.getElementById('error').textContent = "⚠️ " + (data.message || "Failed to generate license");
+                    document.getElementById('error').style.display = 'block';
+                }
+            })
+            .catch(err => {
+                console.error("Error:", err);
+                document.getElementById('generating').style.display = 'none';
+                document.getElementById('error').textContent = "⚠️ Error generating license. Check your email shortly.";
+                document.getElementById('error').style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>
