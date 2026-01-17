@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuthorPal - Professional Writing Suite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 600px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .tagline {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .features {
+            text-align: left;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+            list-style: none;
+        }
+        
+        .features li {
+            padding: 10px 0;
+            color: #555;
+        }
+        
+        .features li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .price {
+            font-size: 3em;
+            color: #667eea;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .price-note {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 30px;
+        }
+        
+        .purchase-section {
+            margin: 30px 0;
+        }
+        
+        .email-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        .email-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn-buy {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+        
+        .btn-buy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-buy:active {
+            transform: translateY(0);
+        }
+        
+        .loading {
+            display: none;
+            color: #667eea;
+            margin-top: 15px;
+        }
+        
+        .error {
+            color: #e74c3c;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .success {
+            color: #27ae60;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 AuthorPal</h1>
+        <p class="tagline">Professional Writing & Story Development Suite</p>
+        
+        <ul class="features">
+            <li>Screenplay & Novel Writing Tools</li>
+            <li>Character & Plot Management</li>
+            <li>Khmer Text Support</li>
+            <li>Professional Formatting</li>
+            <li>Cloud Sync & Backup</li>
+        </ul>
+        
+        <div class="price">$9.99</div>
+        <p class="price-note">One-time purchase • Lifetime access • No subscriptions</p>
+        
+        <div class="purchase-section">
+            <input 
+                type="email" 
+                id="customer-email" 
+                class="email-input" 
+                placeholder="Enter your email address" 
+                required
+            >
+            <button class="btn-buy" onclick="initiatePayment()">
+                🛒 Buy Now with ABA PayWay
+            </button>
+            
+            <div class="loading" id="loading">
+                Processing payment...
+            </div>
+            <div class="error" id="error"></div>
+            <div class="success" id="success"></div>
+        </div>
+        
+        <p style="color: #999; font-size: 0.9em; margin-top: 20px;">
+            💳 Secure payment powered by ABA PayWay
+        </p>
+    </div>
+
+    <script>
+        function initiatePayment() {
+            const email = document.getElementById('customer-email').value;
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const success = document.getElementById('success');
+            
+            // Reset messages
+            error.style.display = 'none';
+            success.style.display = 'none';
+            
+            // Validate email
+            if (!email || !email.includes('@')) {
+                error.textContent = '❌ Please enter a valid email address';
+                error.style.display = 'block';
+                return;
+            }
+            
+            loading.style.display = 'block';
+            
+            // TODO: Replace with your actual ABA PayWay merchant credentials
+            const MERCHANT_ID = "YOUR_ABA_MERCHANT_ID"; // Get from ABA PayWay
+            const AMOUNT = "9.99";
+            const CURRENCY = "USD";
+            
+            // Build ABA PayWay URL
+            // NOTE: This is a simplified example. Check ABA PayWay API docs for exact parameters
+            const abaPaywayURL = "https://payway.ababank.com/checkout?" + 
+                "merchant_id=" + encodeURIComponent(MERCHANT_ID) +
+                "&amount=" + encodeURIComponent(AMOUNT) +
+                "&currency=" + encodeURIComponent(CURRENCY) +
+                "&description=" + encodeURIComponent("AuthorPal Desktop License") +
+                "&email=" + encodeURIComponent(email) +
+                "&return_url=" + encodeURIComponent(window.location.origin + "/success.html?email=" + encodeURIComponent(email)) +
+                "&cancel_url=" + encodeURIComponent(window.location.origin);
+            
+            // Redirect to ABA PayWay
+            window.location.href = abaPaywayURL;
+        }
+    </script>
+</body>
+</html>
