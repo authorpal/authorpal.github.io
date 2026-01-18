@@ -5,7 +5,7 @@ Official payment website for AuthorPal Desktop License.
 ## Setup
 
 1. **GitHub Pages**: Already configured on this repo
-2. **Visit**: https://srengpagna.github.io/author-pal-app
+2. **Visit**: https://authorpal.github.io/author-pal-app
 
 ## Payment Flow
 
@@ -41,4 +41,4 @@ Customer → index.html (Buy Now)
 
 1. Test locally: `python -m http.server 8000`
 2. Visit: `http://localhost:8000`
-3. GitHub Pages: `https://srengpagna.github.io/author-pal-app`
+3. GitHub Pages: `https://authorpal.github.io/author-pal-app`
